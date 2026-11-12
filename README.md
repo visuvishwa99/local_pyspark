@@ -48,7 +48,29 @@ If `JUPYTER_TOKEN` was not set, default local token is `glue-local`:
 http://127.0.0.1:8888/?token=glue-local
 ```
 
-Ports bind to `127.0.0.1`, so Jupyter and Spark UI are not exposed to other machines.
+### How the token works
+
+`JUPYTER_TOKEN` is a local Jupyter authentication token. It is not an AWS credential, GitHub token, or API key. You choose it before starting Compose:
+
+```powershell
+$env:JUPYTER_TOKEN = "choose-a-local-token"
+docker compose up -d
+```
+
+Docker Compose passes that value into the container, and Jupyter requires it when a browser or VS Code connects. To see the configured token:
+
+```powershell
+docker compose exec glue-pyspark printenv JUPYTER_TOKEN
+```
+
+To change it, set a new value and recreate the container:
+
+```powershell
+$env:JUPYTER_TOKEN = "new-local-token"
+docker compose up -d --force-recreate
+```
+
+Do not commit real secrets in `.env`; this repository ignores `.env`. Ports bind to `127.0.0.1`, so Jupyter and Spark UI are not exposed to other machines.
 
 ## Connect VS Code notebook
 
