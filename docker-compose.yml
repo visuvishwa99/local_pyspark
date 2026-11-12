@@ -1,0 +1,17 @@
+services:
+  glue-pyspark:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: glue-pyspark-jupyter:5
+    container_name: glue-pyspark
+    hostname: glue-pyspark
+    environment:
+      JUPYTER_TOKEN: "${JUPYTER_TOKEN:-glue-local}"
+    ports:
+      - "127.0.0.1:8888:8888"
+      - "127.0.0.1:4040:4040"
+    volumes:
+      - .:/home/hadoop/workspace
+    working_dir: /home/hadoop/workspace
+    restart: unless-stopped
